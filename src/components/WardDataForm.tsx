@@ -13,11 +13,12 @@ import { Plus, Trash2, Users, Home } from "lucide-react";
 
 const familyMemberSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
-  age: z.string().min(1, "Age is required"),
-  gender: z.enum(["male", "female", "other"], { required_error: "Gender is required" }),
-  relation: z.string().min(1, "Relation is required"),
-  aadhaarNumber: z.string().optional(),
-  voterId: z.string().optional(),
+  age: z.string().optional(),
+  yearOfBirth: z.string().optional(),
+  mobileNumber: z.string().optional(),
+  maritalStatus: z.enum(["married", "unmarried", "widow/widower"], { required_error: "Marital status is required" }),
+  employmentStatus: z.enum(["employed", "unemployed", "student", "child", "na"], { required_error: "Employment status is required" }),
+  employmentType: z.enum(["selfEmployed", "governmentJob", "professional", "business", "privateSector", "agriculture", "retired", "others"]).optional(),
 });
 
 const formSchema = z.object({
@@ -54,10 +55,11 @@ export default function WardDataForm() {
         {
           name: "",
           age: "",
-          gender: undefined,
-          relation: "",
-          aadhaarNumber: "",
-          voterId: "",
+          yearOfBirth: "",
+          mobileNumber: "",
+          maritalStatus: undefined,
+          employmentStatus: undefined,
+          employmentType: undefined,
         },
       ],
     },
@@ -370,9 +372,9 @@ export default function WardDataForm() {
                         name={`familyMembers.${index}.age`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Age *</FormLabel>
+                            <FormLabel>Age</FormLabel>
                             <FormControl>
-                              <Input type="number" placeholder="Age" {...field} />
+                              <Input type="number" placeholder="Optional" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -381,20 +383,48 @@ export default function WardDataForm() {
 
                       <FormField
                         control={form.control}
-                        name={`familyMembers.${index}.gender`}
+                        name={`familyMembers.${index}.yearOfBirth`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Gender *</FormLabel>
+                            <FormLabel>Year of Birth</FormLabel>
+                            <FormControl>
+                              <Input type="number" placeholder="Optional" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name={`familyMembers.${index}.mobileNumber`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Mobile Number</FormLabel>
+                            <FormControl>
+                              <Input type="tel" placeholder="Optional" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name={`familyMembers.${index}.maritalStatus`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Marital Status *</FormLabel>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Select gender" />
+                                  <SelectValue placeholder="Select marital status" />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="male">Male</SelectItem>
-                                <SelectItem value="female">Female</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
+                                <SelectItem value="married">Married</SelectItem>
+                                <SelectItem value="unmarried">Unmarried</SelectItem>
+                                <SelectItem value="widow/widower">Widow/Widower</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -404,45 +434,58 @@ export default function WardDataForm() {
 
                       <FormField
                         control={form.control}
-                        name={`familyMembers.${index}.relation`}
+                        name={`familyMembers.${index}.employmentStatus`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Relation *</FormLabel>
-                            <FormControl>
-                              <Input placeholder="e.g., Head, Spouse, Child" {...field} />
-                            </FormControl>
+                            <FormLabel>Employment Status *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select employment status" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="employed">Employed</SelectItem>
+                                <SelectItem value="unemployed">Unemployed</SelectItem>
+                                <SelectItem value="student">Student</SelectItem>
+                                <SelectItem value="child">Child</SelectItem>
+                                <SelectItem value="na">NA</SelectItem>
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
 
-                      <FormField
-                        control={form.control}
-                        name={`familyMembers.${index}.aadhaarNumber`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Aadhaar Number</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Optional" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name={`familyMembers.${index}.voterId`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Voter ID</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Optional" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      {form.watch(`familyMembers.${index}.employmentStatus`) === "employed" && (
+                        <FormField
+                          control={form.control}
+                          name={`familyMembers.${index}.employmentType`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Employment Type</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select employment type" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="selfEmployed">Self Employed (Auto, Tailor, Carpenter, Painter etc)</SelectItem>
+                                  <SelectItem value="governmentJob">Government Job</SelectItem>
+                                  <SelectItem value="professional">Professional (Doctor, IT-Professional, Engineer etc)</SelectItem>
+                                  <SelectItem value="business">Business</SelectItem>
+                                  <SelectItem value="privateSector">Private Sector</SelectItem>
+                                  <SelectItem value="agriculture">Agriculture</SelectItem>
+                                  <SelectItem value="retired">Retired</SelectItem>
+                                  <SelectItem value="others">Others</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      )}
                     </div>
                   </div>
                 ))}
@@ -454,10 +497,11 @@ export default function WardDataForm() {
                     append({
                       name: "",
                       age: "",
-                      gender: undefined,
-                      relation: "",
-                      aadhaarNumber: "",
-                      voterId: "",
+                      yearOfBirth: "",
+                      mobileNumber: "",
+                      maritalStatus: undefined,
+                      employmentStatus: undefined,
+                      employmentType: undefined,
                     })
                   }
                   className="w-full"

@@ -137,14 +137,20 @@ export default function WardDataForm() {
 
 const onSubmit = async (data: FormValues) => {
   setIsSubmitting(true);
+  const url = "https://script.google.com/macros/s/AKfycbzah2s71uoY1JR0hvIdlMy5kg_zIbo1tzABW4nCnNlsSZeMzoTPLmGRzHEDuLprZ42WEQ/exec";
+  
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbzGU4iUPwiUWZxvQxlo7wBxfWa4KjOdTltYRGhHidlPeRK1wFryfCH-z0a6LPpLm0vd/exec", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      url,
+      {
+        method: "POST",
+        redirect: "follow",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"  // Changed from application/json
+        },
+        body: JSON.stringify(data)
+      }
+    );
 
     if (!response.ok) throw new Error("Failed to submit");
     const result = await response.json();
@@ -153,7 +159,8 @@ const onSubmit = async (data: FormValues) => {
       toast.success("✅ Form submitted successfully and saved to Google Sheets!");
       form.reset();
     } else {
-      throw new Error("Error saving to Google Sheets");
+      console.log(result)
+      throw new Error(`Error saving to Google Sheets`,);
     }
   } catch (error) {
     console.error(error);

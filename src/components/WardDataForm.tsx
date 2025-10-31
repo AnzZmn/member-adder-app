@@ -138,7 +138,7 @@ export default function WardDataForm() {
 const onSubmit = async (data: FormValues) => {
   setIsSubmitting(true);
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbwApncyC1vUPZWmQk6z_zfvgu0X_7ldy9_ohSBj-PIueGJJ8dKnjjDHBgVR2gI_NoY/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbzxon6gMwBftgnYGUmDakDZl1783llSn6j-RBKm9vVdeBAGTbsxsPoRkmeJ_HJsaUwQ/exec", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

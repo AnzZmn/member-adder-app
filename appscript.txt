@@ -1,0 +1,52 @@
+function sendCorsResponse(response) {
+  response.setHeader("Access-Control-Allow-Origin", "*");
+  response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  return response;
+}
+
+// Handles actual POST
+function doPost(e) {
+  const SS = SpreadsheetApp.openByUrl('https://docs.google.com/spreadsheets/d/1Zai_tKMvyfbgCLAY5RpfXmZP00Cerr1aMjIrQlZhSlE/edit?usp=sharing');
+
+  const data = JSON.parse(e.postData.contents);
+
+
+
+ SS.appendRow([
+    new Date(),
+    data.wardNumber,
+    data.boothNo,
+    data.cluster,
+    data.place,
+    data.houseNumber,
+    data.houseName,
+    data.residency,
+    data.houseType,
+    data.rationCardType,
+    data.familyMembers?.map((m) => m.name).join(", "),
+    data.familyMembers?.map((m) => m.gender).join(", "),
+    data.familyMembers?.map((m) => m.age).join(", "),
+    data.familyMembers?.map((m) => m.dateOfBirth).join(", "),
+    data.familyMembers?.map((m) => m.mobileNumber).join(", "),
+    data.familyMembers?.map((m) => m.maritalStatus).join(", "),
+    data.familyMembers?.map((m) => m.employmentStatus).join(", "),
+    data.familyMembers?.map((m) => m.employmentType).join(", "),
+    data.familyMembers?.map((m) => m.classCourse).join(", "),
+    data.familyMembers?.map((m) => m.institution).join(", "),
+    data.familyMembers?.map((m) => m.location).join(", "),
+    data.familyMembers?.map((m) => m.pensioner).join(", ")
+  ]);
+
+  const output = ContentService
+    .createTextOutput(JSON.stringify({ success: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+
+  return sendCorsResponse(output);
+}
+
+// ✅ Must exist for OPTIONS requests
+function doOptions(e) {
+  const output = ContentService.createTextOutput("");
+  return sendCorsResponse(output);
+}

@@ -135,10 +135,10 @@ export default function WardDataForm() {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: currentYear - 1899 }, (_, i) => String(currentYear - i));
 
- const onSubmit = async (data: FormValues) => {
+const onSubmit = async (data: FormValues) => {
   setIsSubmitting(true);
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbxk_moaS-W2szBukwaBtXnCSzvOdVF-UYfejBrkQn0eI18Akr8My1DIG3g6zuPlXeGw/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbwApncyC1vUPZWmQk6z_zfvgu0X_7ldy9_ohSBj-PIueGJJ8dKnjjDHBgVR2gI_NoY/exec", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -162,6 +162,7 @@ export default function WardDataForm() {
     setIsSubmitting(false);
   }
 };
+
 
 
   return (

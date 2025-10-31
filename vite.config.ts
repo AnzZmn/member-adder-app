@@ -3,25 +3,26 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-   server: {
+  server: {
+    host: "::",
+    port: 8080,
     proxy: {
-      '/api/sheets': {
-        target: 'https://script.google.com/macros/s/AKfycbwe2Wkbw_ZTxqzlpyk1PpMB8laceMbLpbJYHMSVR9lGFMOstS_FjaK4I6rdqFTwyCI/exec',
+      "/api/sheet": {
+        target: "https://script.google.com",
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api\/sheets/, ''),
+        rewrite: (path) =>
+          path.replace(
+            /^\/api\/sheet/,
+            "macros/s/AKfycbzEbasUE3iHGH2wpFWFZOVohtStzvOm7m7Zivk7aOaW9T9wZoXcV19v4L6iXEfFyzzx/exec"
+          ),
       },
     },
   },
-
-
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-
-  
 }));
